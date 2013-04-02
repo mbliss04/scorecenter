@@ -1,12 +1,11 @@
 var express = require('express');
-
 var app = express.createServer(express.logger());
 
+/*
 var databaseUrl = "mydb"; // "username:password@example.com/mydb"
-
 var collections = ["users", "reports"]
-
 var db = require("mongojs").connect(databaseUrl, collections);
+*/
 
 // ENABLE CORS
 app.all('/', function(req, res, next) {
@@ -14,6 +13,7 @@ app.all('/', function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "X-Requested-With");
   next();
  });
+
 
 app.get('/', function(request, response) {
   response.send(function(){
