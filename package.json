@@ -1,6 +1,7 @@
 {
   "name": "scorecenter",
   "version": "0.0.1",
+  "author": "McCall Bliss",
   "dependencies": {
     "express": "2.5.x"
   },
