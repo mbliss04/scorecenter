@@ -1,3 +1,5 @@
+include ("/javascripts/jquery.js");
+
 var express = require('express');
 var app = express.createServer(express.logger());
 
@@ -18,7 +20,7 @@ app.all('/', function(req, res, next) {
 app.get('/', function(request, response) {
   response.send(function(){
   	// display list of all high scores
-
+  	//$.post( url [, data ] [, success(data, textStatus, jqXHR) ] [, dataType ] )
   	// display one text box with searchable username
   });
 });
@@ -32,6 +34,13 @@ db.users.find({sex: "female"}, function(err, users) {
   else users.forEach( function(femaleUser) {
     console.log(femaleUser);
   } );
+});
+
+Save a username and score
+
+db.users.save({email: "srirangan@gmail.com", password: "iLoveMongo", sex: "male"}, function(err, saved) {
+  if( err || !saved ) console.log("User not saved");
+  else console.log("User saved");
 });
 
 */
