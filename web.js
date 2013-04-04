@@ -3,11 +3,15 @@ include ("/javascripts/jquery.js");
 var express = require('express');
 var app = express.createServer(express.logger());
 
-/*
-var databaseUrl = "mydb"; // "username:password@example.com/mydb"
-var collections = ["users", "reports"]
-var db = require("mongojs").connect(databaseUrl, collections);
-*/
+var mongo = require('mongodb');
+var db = new mongo.Db('highscores', new mongo.Server('localhost',22892, {}), {});
+
+db.open(function(){});
+
+db.collection('docs', function(err,collection){
+    doc = {"foo":"bar"};
+    collection.insert(doc, function(){});
+});
 
 // ENABLE CORS
 app.all('/', function(req, res, next) {
