@@ -1,17 +1,11 @@
-include ("/javascripts/jquery.js");
+//include ("/javascripts/jquery.js");
 
 var express = require('express');
 var app = express.createServer(express.logger());
 
-var mongo = require('mongodb');
-var db = new mongo.Db('highscores', new mongo.Server('localhost',22892, {}), {});
-
-db.open(function(){});
-
-db.collection('docs', function(err,collection){
-    doc = {"foo":"bar"};
-    collection.insert(doc, function(){});
-});
+var databaseUrl = "highscores"; // "username:password@example.com/mydb"
+var collections = ["users", "reports"]
+var db = require("mongojs").connect(databaseUrl, collections);
 
 // ENABLE CORS
 app.all('/', function(req, res, next) {
@@ -20,13 +14,8 @@ app.all('/', function(req, res, next) {
   next();
  });
 
-
 app.get('/', function(request, response) {
-  response.send(function(){
-  	// display list of all high scores
-  	//$.post( url [, data ] [, success(data, textStatus, jqXHR) ] [, dataType ] )
-  	// display one text box with searchable username
-  });
+  response.send("hi");
 });
 
 /* FUNCTIONS I NEED
