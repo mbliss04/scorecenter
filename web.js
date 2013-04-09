@@ -3,6 +3,11 @@
 var express = require('express');
 var app = express.createServer(express.logger());
 
+app.configure(function(){
+        app.set('views', __dirname + '/views');
+        app.use(express.static(__dirname + '/public'));
+})
+
 // ENABLE CORS
 app.all('/', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -10,19 +15,13 @@ app.all('/', function(req, res, next) {
   next();
  });
 
-app.get('/', function(request, response) {
-  response.send("hi");
+app.get('/', function(req, res) {
+  res.render('/index.html');
 });
-
-/*
-var databaseUrl = "git@heroku.com:high-scores.git/highscores"; // "username:password@example.com/mydb"
-var collections = ["users", "reports"]
-var db = require("mongojs").connect(databaseUrl, collections);
-*/
 
 var mongodb = require("mongodb"),
     mongoserver = new mongodb.Server('localhost', 2701, {safe:false,}),
-    db_connector = new mongodb.Db('highscores', mongoserver, {w:0});
+    db_connector = new mongodb.Db('highscores', mongoserver, {w:0}); 
 
 db_connector.open(function() {
   // call back when the call db.open() returns
