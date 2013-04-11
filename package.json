@@ -4,7 +4,7 @@
   "author": "McCall Bliss",
   "dependencies": {
     "express": "latest",
-    "mongodb": "0.9.x"
+    "mongodb": "latest"
   },
   "engines": {
     "node": "0.8.x",
