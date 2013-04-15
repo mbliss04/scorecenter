@@ -12,19 +12,20 @@ app.all('/', function (req, res, next) {
 
 // Mongo initialization
 var mongoUri = process.env.MONGOLAB_URI ||
-process.env.MONGOHQ_URL ||
-'mongodb://localhost/scorecenter';
+process.env.MONGOHQ_URL;
+console.log(process.env.MONGOHQ_URL);
 var mongo = require('mongodb');
+/*
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
   console.log(error);
   db = databaseConnection;
 });
 
 app.get('/', function (request, response) {
-  db.collection('scores', function (err, collection) {
-    console.log(err);
-    collection.insert({'hello':'hi'});
-  });
+  //db.collection('scores', function (err, collection) {
+    //console.log(err);
+    //collection.insert({'hello':'hi'});
+  //});
   response.set('Content-Type', 'text/html');
   response.send('<p>Hi!</p>');
 });
@@ -43,7 +44,7 @@ var port = process.env.PORT || 7000;
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
-
+*/
 /*
 app.get("/", function (request, response) {
   db.collection('scores', function (er, collection) {
