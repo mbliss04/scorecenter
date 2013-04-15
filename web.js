@@ -22,6 +22,7 @@ process.env.MONGOHQ_URL ||
 'mongodb://localhost/scorecenter';
 var mongo = require('mongodb');
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
+  console.log(error);
   db = databaseConnection;
 });
 
