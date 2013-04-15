@@ -3,12 +3,6 @@ var express = require('express');
 var app = express(express.logger());
 app.use(express.bodyParser());
 
-/*app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.use(express.static(__dirname + '/public'));
-});
-*/
-
 // Enable CORS
 app.all('/', function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -27,6 +21,10 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 });
 
 app.get('/', function (request, response) {
+  db.collection('scores', function (err, collection) {
+    console.log(err);
+    collection.insert({'hello':'hi'});
+  });
   response.set('Content-Type', 'text/html');
   response.send('<p>Hi!</p>');
 });
