@@ -40,7 +40,7 @@ app.get('/', function (request, response) {
       cursor.each(function (err, item) {
         console.log(err);
         if (item) {
-          content = content + '<tr><td>' + item.game_title + '</td><td>' + item.username + '</td><td>' + item.score + '</td><td>' + item.dateplayed + '</td></tr>';
+          content = content + '<tr><td>' + item.game_title + '</td><td>' + item.username + '</td><td>' + item.score + '</td><td>' + item.created_at + '</td></tr>';
         } 
         else {
           db.close();
