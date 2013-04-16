@@ -84,7 +84,7 @@ app.post('/displayuser', function (req, res) {
     collection.find({username:user}).sort({score:1}, function (err, cursor) {
       cursor.each(function (err, item) {
         if (item) {
-          content = content + '<tr><td>' + item.game_title + '</td><td>' + item.score + '</td><td>' + item.dateplayed + '</td></tr>';
+          content = content + '<tr><td>' + item.game_title + '</td><td>' + item.score + '</td><td>' + item.created_at + '</td></tr>';
         }
         else {
           db.close();
