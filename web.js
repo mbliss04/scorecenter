@@ -13,10 +13,10 @@ app.all('/', function (req, res, next) {
 // Mongo initialization
 var mongoUri = process.env.MONGOLAB_URI ||
 process.env.MONGOHQ_URL ||
-'mongodb://<mccall>:<a1daf5ae5868ab7c9e6fee4050e20fc5>@dharma.mongohq.com:10021/scores' ||
 'mongodb://localhost:27017/scorecenter';
 var mongo = require('mongodb');
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
+  console.log(error);
   db = databaseConnection;
 });
 
