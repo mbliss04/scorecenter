@@ -22,14 +22,18 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 });
 
 app.post('/submit.json', function (request, response) {
-  db.collection('scores', function (err, collection) {
-    for (i = 0; i < request.body.length(); i++) {
-      if (!err) {
-        collection.insert(request.body[i]);
-        console.log('inserting');
-      }
-    }
-  });
+  if (request.username && request.score && request.game_title) {
+    db.collection('scores', function (err, collection) {
+      jsonstring = '{';
+      var user = "{ 'username' : " + request.username + "}";
+      var game = "{ 'game_title' : " + request.game_title + "}";
+      var score = "{ 'score' : " + request.score + "}";
+      var dateplayed = new Date;
+      jsonstring = jsonstring + user + game + score + dateplayed + '}';
+      console.log(jsonstring);
+      collection.insert(jsonstring);
+    });
+  }
 });
 
 app.get('/', function (request, response) {
@@ -60,12 +64,12 @@ app.get('/highscores.json', function (request, response) {
     collection.find(game).sort({score:-1}).limit(10, function (err, cursor) {
       cursor.each(function (er, item) {
         if (item) {
-          content = content + '<p>' + JSON.stringify(item) + '</p>';
+          content = content + JSON.stringify(item);
         }
         else {
           db.close();
-          response.set('Content-Type', 'text/html');
-          response.send('<html><body><h1>Top Ten Scores for ' + game.game_title + '</h1><p>' + content + '</p><p><a href="/">Back to all highscores</a></p></body></html>');
+          response.set('Content-Type', 'text/json');
+          response.send(content);
         }
       });
     });
