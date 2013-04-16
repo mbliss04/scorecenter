@@ -2,6 +2,7 @@
 var express = require('express');
 var app = express(express.logger());
 app.use(express.bodyParser());
+app.set('title', 'scorecenter');
 
 // Enable CORS
 app.all('/', function (req, res, next) {
@@ -33,8 +34,7 @@ app.post('/submit.json', function (request, response) {
 
 app.get('/', function (request, response) {
   db.collection('scores', function (err, collection) {
-    collection.insert({'game_title':'frogger', 'username': 'mccall', 'score': '50'});
-    collection.find(function (err, cursor) {
+    collection.find().sort({game_title:1}, function (err, cursor) {
       console.log(err);
       var content = '';
       cursor.each(function (err, item) {
@@ -78,19 +78,20 @@ app.get('/usersearch', function (request, response) {
 });
 
 app.post('/displayuser', function (req, res) {
-  var username = req.body.username;
+  var user = req.body.username;
   var content = '';
   db.collection('scores', function (error, collection) {
-    collection.find({'username': username}, function (err, item) {
-      console.log(err);
-      if (item) {
-        content = content + '<tr><td>' + item.game_title + '</td><td>' + item.score + '</td><td>' + item.dateplayed + '</td></tr>';
-      }
-      else {
-        db.close();
-        res.set('Content-Type', 'text/html');
-        res.send('<!DOCTYPE html><html><h1>Displaying a list of scores for ' + username + '</h1><table border=1px width=400px><tr><td>Game</td><td>Score</td><td>Date Played</td></tr>' + content + '</table><p><a href="/">Back to all highscores</a></p></html>');
-      }
+    collection.find({username:user}).sort({score:1}, function (err, cursor) {
+      cursor.each(function (err, item) {
+        if (item) {
+          content = content + '<tr><td>' + item.game_title + '</td><td>' + item.score + '</td><td>' + item.dateplayed + '</td></tr>';
+        }
+        else {
+          db.close();
+          res.set('Content-Type', 'text/html');
+          res.send('<!DOCTYPE html><html><h1>Displaying a list of scores for ' + user + '</h1><table border=1px width=400px><tr><td>Game</td><td>Score</td><td>Date Played</td></tr>' + content + '</table><p><a href="/">Back to all highscores</a></p></html>');
+        }
+      });
     });
   });
 });
