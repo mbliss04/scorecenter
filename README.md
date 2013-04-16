@@ -28,7 +28,7 @@ REQUIREMENTS
 
 Example: /highscores.json?game_title=frogger returns the top 10 scores in descending order for the game "frogger". 
 Example output: 
-[{"gametitle":"frogger","username":"batman","score":"86","created_at":"Sun Mar 24 2013 23:51:58 GMT-0400 (EDT)","_id":"514fc9deb7cda6f604000003"},{"gametitle":"frogger","username":"batman","score":"46","created_at":"Sun Mar 24 2013 22:56:43 GMT-0400 (EDT)","_id":"514fbceb8a831df401000009"},{"gametitle":"frogger","username":"batman","score":"32","created_at":"Sun Mar 24 2013 22:52:01 GMT-0400 (EDT)","_id":"514fbbd18a831df401000006"}]. Cross-origin resource sharing must be enabled for this API else an HTML5 game from another domain cannot retrieve high scores.
+[{"game_title":"frogger","username":"batman","score":"86","created_at":"Sun Mar 24 2013 23:51:58 GMT-0400 (EDT)","_id":"514fc9deb7cda6f604000003"},{"game_title":"frogger","username":"batman","score":"46","created_at":"Sun Mar 24 2013 22:56:43 GMT-0400 (EDT)","_id":"514fbceb8a831df401000009"},{"game_title":"frogger","username":"batman","score":"32","created_at":"Sun Mar 24 2013 22:52:01 GMT-0400 (EDT)","_id":"514fbbd18a831df401000006"}]. Cross-origin resource sharing must be enabled for this API else an HTML5 game from another domain cannot retrieve high scores.
 
 3. / - Home, the root, the index. Accessing http://yourappname.heroku.com on a web browser shall display list of all the scores for all games. You are free to design this section however you desire.
 
