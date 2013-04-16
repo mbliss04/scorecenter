@@ -28,29 +28,48 @@ app.post('/submit.json', function (request, response) {
         console.log('inserting');
       }
     }
-  })
+  });
 });
 
 app.get('/', function (request, response) {
   db.collection('scores', function (err, collection) {
-    collection.insert({'mccall':'bliss'});
     collection.insert({'game_title':'frogger', 'username': 'mccall', 'score': '50'});
-    console.log('inserted');
+    collection.find(function (err, cursor) {
+      console.log(err);
+      var content = '';
+      cursor.each(function (err, item) {
+        console.log(err);
+        if (item) {
+          content = content + '<tr><td>' + item.game_title + '</td><td>' + item.username + '</td><td>' + item.score + '</td><td>' + item.dateplayed + '</td></tr>';
+        } 
+        else {
+          db.close();
+          response.set('Content-Type', 'text/html');
+          response.send('<!DOCTYPE html><html><head><title>Scorecenter</title></head><body><h1>High Scores</h1><p><a href="/usersearch">Find scores for a specific user</a></p><p>Find the top 10 scores for a specific game</p><form name="topscores" action="highscores.json" method="get">Game: <input type="text" name="game_title"><input type="submit" value="Submit"></form><p><table border=1px width=400px><tr><td>Game</td><td>Username</td><td>Score</td><td>Date Played</td></tr>' + content + '</table></p></body></html>');
+        }
+      });
+    });
   });
-  response.set('Content-Type', 'text/html');
-  response.sendfile('public/index.html');
 });
 
 
 app.get('/highscores.json', function (request, response) {
-  var game = request.body.game_title;
+  var game = request.query;
   var content = '';
-  db.collection('scores', function (req, res) {
-    collection.find(game);
-    //content = JSON.stringify();
+  db.collection('scores', function (error, collection) {
+    collection.find(game).sort({score:-1}).limit(10, function (err, cursor) {
+      cursor.each(function (er, item) {
+        if (item) {
+          content = content + '<p>' + JSON.stringify(item) + '</p>';
+        }
+        else {
+          db.close();
+          response.set('Content-Type', 'text/html');
+          response.send('<html><body><h1>Top Ten Scores for ' + game.game_title + '</h1><p>' + content + '</p><p><a href="/">Back to all highscores</a></p></body></html>');
+        }
+      });
+    });
   });
-  response.set('Content-Type', 'text/json');
-  response.send(content);
 });
 
 app.get('/usersearch', function (request, response) {
@@ -59,22 +78,21 @@ app.get('/usersearch', function (request, response) {
 });
 
 app.post('/displayuser', function (req, res) {
-  var scores = new Array();
   var username = req.body.username;
-  /*
-  db.collection('scores', function (request, response) {
-    collection.find({'username':username});
-  });*/
   var content = '';
-  for (i = 0; i < scores.length(); i++) {
-    content = content + '<tr><td>' + scores[i].game_title + '</td><td>' + scores[i].score + '</td><td>' + scores[i].dateplayed + '</td></tr>';
-  }
-  res.send('<!DOCTYPE html><html><h1>Displaying a list of scores for ' + username + '</h1><table border=1px width=400px><tr><td>Game</td><td>Score</td><td>Date Played</td></tr>' + content + '</table><p><a href="/">Back to all highscores</a></p></html>');
-});
-
-app.get('/fool', function (request, response) {
-  response.set('Content-Type', 'text/html');
-  response.send(500, 'Something broke!');
+  db.collection('scores', function (error, collection) {
+    collection.find({'username': username}, function (err, item) {
+      console.log(err);
+      if (item) {
+        content = content + '<tr><td>' + item.game_title + '</td><td>' + item.score + '</td><td>' + item.dateplayed + '</td></tr>';
+      }
+      else {
+        db.close();
+        res.set('Content-Type', 'text/html');
+        res.send('<!DOCTYPE html><html><h1>Displaying a list of scores for ' + username + '</h1><table border=1px width=400px><tr><td>Game</td><td>Score</td><td>Date Played</td></tr>' + content + '</table><p><a href="/">Back to all highscores</a></p></html>');
+      }
+    });
+  });
 });
 
 var port = process.env.PORT || 7000;
