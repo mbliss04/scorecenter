@@ -43,8 +43,14 @@ app.get('/', function (request, response) {
 
 
 app.get('/highscores.json', function (request, response) {
+  var game = request.body.game_title;
+  var content = '';
+  db.collection('scores', function (req, res) {
+    collection.find(game);
+    //content = JSON.stringify();
+  });
   response.set('Content-Type', 'text/json');
-  response.send('{"status":"good"}');
+  response.send(content);
 });
 
 app.get('/usersearch', function (request, response) {
