@@ -2,16 +2,16 @@ ScoreCenter
 
 Author: McCall Bliss
 Created: 3/31/13
-Last Modified: 3/31/13
+Last Modified: 4/15/13
 
 1. Correctly Implented:
 	- 
 
 2. Worked With:
-	- 
+	- Ann Bellinger, Jake Lipson, Brett Fischler, and Jay Wright
 
 3. Time Spent:
-	-
+	- 20 hours
 
 OBJECTIVES
 
