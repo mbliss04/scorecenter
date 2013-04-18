@@ -38,7 +38,6 @@ app.post('/submit.json', function (request, response) {
 
 app.get('/', function (request, response) {
   db.collection('scores', function (err, collection) {
-    collection.insert({'game_title':'pong', 'username':'wes', 'score':'600'});
     collection.find().sort({game_title:1}, function (err, cursor) {
       console.log(err);
       var content = '';
