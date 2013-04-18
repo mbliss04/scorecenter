@@ -15,21 +15,18 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 });
 
 app.post('/submit.json', function (request, response) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  if (request.username && request.score && request.game_title) {
-    db.collection('scores', function (err, collection) {
-      console.log(err);
-      var content = new Object();
-      content.username = request.username;
-      content.game_title = request.game_title;
-      content.score = request.score;
-      content.created_at = new Date;
-      var jsonstring = JSON.stringify(content);
-      collection.insert(jsonstring);
-      db.close();
-    });
-  }
+  response.header("Access-Control-Allow-Origin", "*");
+  response.header("Access-Control-Allow-Headers", "X-Requested-With");
+  var username = request.body.username;
+  var score = parseInt(request.body.score);
+  var game_title = request.body.game_title;
+  var created_at = new Date();
+  var jsonstring = {"username":username, "score":score, "game_title":game_title, "created_at":created_at};
+  db.collection('scores', function (err, collection) {
+    collection.insert(jsonstring);
+    response.send("saved");
+    db.close();
+  });
 });
 
 app.get('/', function (request, response) {
