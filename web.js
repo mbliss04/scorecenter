@@ -4,13 +4,6 @@ var app = express(express.logger());
 app.use(express.bodyParser());
 app.set('title', 'scorecenter');
 
-// Enable CORS
-app.all('/', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
-
 // Mongo initialization
 var mongoUri = process.env.MONGOLAB_URI ||
 process.env.MONGOHQ_URL ||
@@ -22,16 +15,19 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 });
 
 app.post('/submit.json', function (request, response) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
   if (request.username && request.score && request.game_title) {
     db.collection('scores', function (err, collection) {
-      jsonstring = '{';
-      var user = "{ 'username' : " + request.username + "}";
-      var game = "{ 'game_title' : " + request.game_title + "}";
-      var score = "{ 'score' : " + request.score + "}";
-      var dateplayed = new Date;
-      jsonstring = jsonstring + user + game + score + dateplayed + '}';
-      console.log(jsonstring);
+      console.log(err);
+      var content = new Object();
+      content.username = request.username;
+      content.game_title = request.game_title;
+      content.score = request.score;
+      content.created_at = new Date;
+      var jsonstring = JSON.stringify(content);
       collection.insert(jsonstring);
+      db.close();
     });
   }
 });
