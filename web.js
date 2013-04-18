@@ -23,7 +23,7 @@ app.post('/submit.json', function (request, response) {
   var created_at = new Date();
   var jsonstring = {"username":username, "score":score, "game_title":game_title, "created_at":created_at};
   db.collection('scores', function (err, collection) {
-    collection.insert(jsonstring);
+    //collection.insert(jsonstring);
     response.send("saved");
     db.close();
   });
