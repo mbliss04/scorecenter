@@ -15,6 +15,7 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 });
 
 app.post('/submit.json', function (request, response) {
+  app.set('Content-Type', 'text/json');
   response.header("Access-Control-Allow-Origin", "*");
   response.header("Access-Control-Allow-Headers", "X-Requested-With");
   var username = request.body.username;
@@ -23,7 +24,9 @@ app.post('/submit.json', function (request, response) {
   var created_at = new Date();
   var jsonstring = {"username":username, "score":score, "game_title":game_title, "created_at":created_at};
   db.collection('scores', function (err, collection) {
-    //collection.insert(jsonstring);
+    collection.insert(jsonstring, function (err, saved){
+      console.log(err);
+    });
     response.send("saved");
     db.close();
   });
