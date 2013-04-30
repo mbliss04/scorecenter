@@ -19,16 +19,14 @@ app.post('/submit.json', function (request, response) {
   response.header("Access-Control-Allow-Origin", "*");
   response.header("Access-Control-Allow-Headers", "X-Requested-With");
   var username = request.body.username;
-  var score = parseInt(request.body.score);
+  var score = request.body.score;
   var game_title = request.body.game_title;
-  var created_at = new Date();
-  var jsonstring = {"username":username, "score":score, "game_title":game_title, "created_at":created_at};
+  var jsonstring = {"username":username, "score":score, "game_title":game_title, "created_at":Date()};
   db.collection('scores', function (err, collection) {
     collection.insert(jsonstring, function (err, saved){
       console.log(err);
+      response.send("saved");
     });
-    response.send("saved");
-    db.close();
   });
 });
 
@@ -43,7 +41,6 @@ app.get('/', function (request, response) {
           content = content + '<tr><td>' + item.game_title + '</td><td>' + item.username + '</td><td>' + item.score + '</td><td>' + item.created_at + '</td></tr>';
         } 
         else {
-          db.close();
           response.set('Content-Type', 'text/html');
           response.send('<!DOCTYPE html><html><head><title>Scorecenter</title></head><body><h1>High Scores</h1><p><a href="/usersearch">Find scores for a specific user</a></p><p>Find the top 10 scores for a specific game</p><form name="topscores" action="highscores.json" method="get">Game: <input type="text" name="game_title"><input type="submit" value="Submit"></form><p><table border=1px width=400px><tr><td>Game</td><td>Username</td><td>Score</td><td>Date Played</td></tr>' + content + '</table></p></body></html>');
         }
@@ -63,7 +60,6 @@ app.get('/highscores.json', function (request, response) {
           content = content + JSON.stringify(item);
         }
         else {
-          db.close();
           response.set('Content-Type', 'text/json');
           response.send(content);
         }
@@ -87,7 +83,6 @@ app.post('/displayuser', function (req, res) {
           content = content + '<tr><td>' + item.game_title + '</td><td>' + item.score + '</td><td>' + item.created_at + '</td></tr>';
         }
         else {
-          db.close();
           res.set('Content-Type', 'text/html');
           res.send('<!DOCTYPE html><html><h1>Displaying a list of scores for ' + user + '</h1><table border=1px width=400px><tr><td>Game</td><td>Score</td><td>Date Played</td></tr>' + content + '</table><p><a href="/">Back to all highscores</a></p></html>');
         }
